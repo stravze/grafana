@@ -1,58 +1,158 @@
-{
-  "dashboard": {
-    "id": null,
-    "title": "ECS Cluster Monitoring Dashboard",
-    "tags": ["ecs", "cluster", "containers"],
-    "timezone": "browser",
-    "schemaVersion": 22,
-    "version": 0,
-    "refresh": "5m",
-    "panels": [
-      {
-        "title": "Cluster Status",
-        "type": "stat",
-        "datasource": "Prometheus",
-        "targets": [
-          {
-            "expr": "sum(up{job=\"ecs-cluster\"})",
-            "legendFormat": "Cluster Up"
+[
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
           }
-        ]
+        },
+        "overrides": []
       },
-      {
-        "title": "Container Task States",
-        "type": "graph",
-        "datasource": "Prometheus",
-        "targets": [
-          {
-            "expr": "sum(contain_tasks_state) by (state)",
-            "legendFormat": "{{state}}"
-          }
-        ],
-        "yaxes": [
-          {
-            "format": "short",
-            "label": "Tasks"
-          }
-        ]
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
       },
-      {
-        "title": "Containers by ECS Cluster",
-        "type": "graph",
-        "datasource": "Prometheus",
-        "targets": [
-          {
-            "expr": "count(container_label_com_amazonaws_com_ecs_cluster) by (container_label_com_amazonaws_com_ecs_cluster)",
-            "legendFormat": "{{container_label_com_amazonaws_com_ecs_cluster}}"
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "count by (container_label_com_amazonaws_com_ecs_cluster) (container_tasks_state{state=\"running\", container_label_com_amazonaws_com_ecs_cluster!=\"\"} > 0)",
+          "legendFormat": "{{container_label_com_amazonaws_com_ecs_cluster}}"
+        }
+      ],
+      "title": "Running Tasks by ECS Cluster",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
           }
-        ],
-        "yaxes": [
-          {
-            "format": "short",
-            "label": "Containers"
-          }
-        ]
-      }
-    ]
-  }
-}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "count by (container_label_com_amazonaws_ecs_task_definition_family) (container_tasks_state{state=\"running\", container_label_com_amazonaws_ecs_task_definition_family!=\"\"} > 0)",
+          "legendFormat": "{{container_label_com_amazonaws_ecs_task_definition_family}}"
+        }
+      ],
+      "title": "Running Tasks by ECS Task Definition Family",
+      "type": "timeseries"
+    }
+  ]
