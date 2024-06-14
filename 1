@@ -1,0 +1,58 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "ECS Cluster Monitoring Dashboard",
+    "tags": ["ecs", "cluster", "containers"],
+    "timezone": "browser",
+    "schemaVersion": 22,
+    "version": 0,
+    "refresh": "5m",
+    "panels": [
+      {
+        "title": "Cluster Status",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(up{job=\"ecs-cluster\"})",
+            "legendFormat": "Cluster Up"
+          }
+        ]
+      },
+      {
+        "title": "Container Task States",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(contain_tasks_state) by (state)",
+            "legendFormat": "{{state}}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "Tasks"
+          }
+        ]
+      },
+      {
+        "title": "Containers by ECS Cluster",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "count(container_label_com_amazonaws_com_ecs_cluster) by (container_label_com_amazonaws_com_ecs_cluster)",
+            "legendFormat": "{{container_label_com_amazonaws_com_ecs_cluster}}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "Containers"
+          }
+        ]
+      }
+    ]
+  }
+}
