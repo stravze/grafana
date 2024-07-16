@@ -1,0 +1,86 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "aws-ecs-service-details",
+    "title": "AWS ECS Service Details",
+    "tags": ["aws", "ecs", "service"],
+    "timezone": "browser",
+    "schemaVersion": 22,
+    "version": 0,
+    "refresh": "5m",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Running Tasks",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "aws_ecs_running_tasks{cluster=\"$cluster\", service=\"$service\"}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "CPU Utilization",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "avg(aws_ecs_cpu_utilization{cluster=\"$cluster\", service=\"$service\"}) by (task_definition)",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Memory Utilization",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "avg(aws_ecs_memory_utilization{cluster=\"$cluster\", service=\"$service\"}) by (task_definition)",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 0
+        }
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "cluster",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(aws_ecs_clusters, cluster)"
+        },
+        {
+          "name": "service",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(aws_ecs_services{cluster=\"$cluster\"}, service)"
+        }
+      ]
+    }
+  },
+  "folderId": 0,
+  "overwrite": false
+}
