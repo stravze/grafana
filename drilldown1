@@ -1,0 +1,58 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": null,
+    "title": "AWS Overview",
+    "tags": ["aws", "overview"],
+    "timezone": "browser",
+    "schemaVersion": 22,
+    "version": 0,
+    "refresh": "5m",
+    "panels": [
+      {
+        "id": 1,
+        "title": "AWS Regions",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "count(aws_regions)",
+            "refId": "A"
+          }
+        ],
+        "links": [
+          {
+            "title": "Drill down to ECS",
+            "url": "/d/aws-ecs-details"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Total EC2 Instances",
+        "type": "gauge",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(aws_ec2_total_instances)",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      }
+    ]
+  },
+  "folderId": 0,
+  "overwrite": false
+}
