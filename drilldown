@@ -1,0 +1,149 @@
+{
+  "dashboard": {
+    "id": "aws-ecs-overview",
+    "title": "AWS ECS Overview",
+    "panels": [
+      {
+        "id": 1,
+        "title": "AWS Overview",
+        "type": "row",
+        "collapsed": false,
+        "panels": [
+          {
+            "id": 2,
+            "title": "AWS Regions",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "count(aws_regions)",
+                "refId": "A"
+              }
+            ],
+            "links": [
+              {
+                "title": "Drill down to ECS",
+                "url": "/d/aws-ecs-details"
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "title": "Total EC2 Instances",
+            "type": "gauge",
+            "targets": [
+              {
+                "expr": "sum(aws_ec2_total_instances)",
+                "refId": "A"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "dashboard": {
+    "id": "aws-ecs-details",
+    "title": "AWS ECS Details",
+    "panels": [
+      {
+        "id": 1,
+        "title": "ECS Overview",
+        "type": "row",
+        "collapsed": false,
+        "panels": [
+          {
+            "id": 2,
+            "title": "ECS Clusters",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "count(aws_ecs_clusters)",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "title": "ECS Services",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "sum(aws_ecs_services) by (cluster)",
+                "refId": "A"
+              }
+            ],
+            "links": [
+              {
+                "title": "Drill down to Service Details",
+                "url": "/d/aws-ecs-service-details?var-cluster=${__cell_name}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "dashboard": {
+    "id": "aws-ecs-service-details",
+    "title": "AWS ECS Service Details",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Service Overview",
+        "type": "row",
+        "collapsed": false,
+        "panels": [
+          {
+            "id": 2,
+            "title": "Running Tasks",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "aws_ecs_running_tasks{cluster=\"$cluster\", service=\"$service\"}",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "title": "CPU Utilization",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "avg(aws_ecs_cpu_utilization{cluster=\"$cluster\", service=\"$service\"}) by (task_definition)",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "title": "Memory Utilization",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "avg(aws_ecs_memory_utilization{cluster=\"$cluster\", service=\"$service\"}) by (task_definition)",
+                "refId": "A"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "cluster",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(aws_ecs_clusters, cluster)"
+        },
+        {
+          "name": "service",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(aws_ecs_services{cluster=\"$cluster\"}, service)"
+        }
+      ]
+    }
+  }
+}
