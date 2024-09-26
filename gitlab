@@ -1,3 +1,12 @@
+#!/bin/bash
+
+# Install GitLab runner and other necessary packages
+# (Your existing installation steps here)
+
+# Register GitLab runner
+# (Your existing registration steps here)
+
+# Create unregistration script
 cat <<EOF > /usr/local/bin/gitlab-runner-unregister.sh
 #!/bin/bash
 
@@ -15,3 +24,25 @@ EOF
 
 # Make the script executable
 chmod +x /usr/local/bin/gitlab-runner-unregister.sh
+
+# Create a systemd service for unregistration
+cat <<EOF > /etc/systemd/system/gitlab-runner-unregister.service
+[Unit]
+Description=GitLab Runner Unregister
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/gitlab-runner-unregister.sh
+TimeoutStartSec=0
+
+[Install]
+WantedBy=shutdown.target reboot.target halt.target
+EOF
+
+# Enable the service
+systemctl enable gitlab-runner-unregister.service
+
+# Log the setup completion
+echo "$(date): GitLab runner setup completed with unregistration service" | tee -a /var/log/gitlab-runner-lifecycle.log
