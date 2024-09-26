@@ -1,0 +1,17 @@
+cat <<EOF > /usr/local/bin/gitlab-runner-unregister.sh
+#!/bin/bash
+
+# Stop GitLab runner service
+systemctl stop gitlab-runner
+
+# Unregister all runners
+gitlab-runner unregister --all-runners
+
+# Log the unregistration
+echo "\$(date): GitLab runner unregistered" | tee -a /var/log/gitlab-runner-lifecycle.log
+
+exit 0
+EOF
+
+# Make the script executable
+chmod +x /usr/local/bin/gitlab-runner-unregister.sh
