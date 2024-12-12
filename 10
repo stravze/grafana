@@ -1,0 +1,176 @@
+{
+  "annotations": {},
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "${datasource}",
+      "description": "Total number of RDS instances by state and availability zone",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "red", "value": 0}
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "count(aws_rds_instance_info{}) by (availability_zone, state)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "RDS Instances by Availability Zone and State",
+      "type": "table"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "Pie chart of RDS instance states",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "pieType": "pie"
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "count(aws_rds_instance_info{}) by (state)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "{{state}}",
+          "refId": "A"
+        }
+      ],
+      "title": "RDS Instance States Distribution",
+      "type": "pie"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "Bar chart of RDS instances in different availability zones",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "datasource": "${datasource}",
+          "expr": "count(aws_rds_instance_info{}) by (availability_zone)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "{{availability_zone}}",
+          "refId": "A"
+        }
+      ],
+      "title": "RDS Instances per Availability Zone",
+      "type": "bargauge"
+    }
+  ],
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["aws", "rds"],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "AWS RDS Instances Overview",
+  "uid": "rds-instances-dashboard",
+  "version": 1,
+  "weekStart": ""
+}
